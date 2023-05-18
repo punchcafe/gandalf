@@ -18,6 +18,8 @@ defmodule GandalfWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    live "/quiz", QuestionsLive
   end
 
   # Other scopes may use custom stacks.
