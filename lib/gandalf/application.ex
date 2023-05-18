@@ -10,8 +10,6 @@ defmodule Gandalf.Application do
     children = [
       # Start the Telemetry supervisor
       GandalfWeb.Telemetry,
-      # Start the Ecto repository
-      Gandalf.Repo,
       # Start the PubSub system
       {Phoenix.PubSub, name: Gandalf.PubSub},
       # Start Finch

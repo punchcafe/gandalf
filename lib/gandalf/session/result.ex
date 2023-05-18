@@ -1,6 +1,6 @@
 defmodule Gandalf.Session.Result do
 
-    @type sub_topic_metric :: {sub_topic :: atom(), score :: is_integer()}
+    @type sub_topic_metric :: {sub_topic :: atom(), score :: integer()}
     @type t() :: %{topic_name :: atom() => [sub_topic_metric]}
 
 
