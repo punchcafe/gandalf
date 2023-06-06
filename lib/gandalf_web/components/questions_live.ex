@@ -1,35 +1,48 @@
 defmodule GandalfWeb.QuestionsLive do
+  use Phoenix.LiveView
+  alias Gandalf.Session
 
-    use Phoenix.LiveView
-
-    def render(assigns) do
-        ~H"""
-        <div class="question">
-          <p class="question-text">
-            <%= @question_text %>
-          </p>
-          <button phx-click="answer" phx-value-question-id="networks:1:1124" phx-value-answer-id="1">1</button>
-          <button phx-click="answer" phx-value-question-id="networks:1:1124" phx-value-answer-id="2">2</button>
-        </div>
-        """
+  def render(socket = %{session: session}) do
+    case Session.next_question(session) do
+      {:ok, question} -> socket |> assign(:question, question) |> render_question()
+      {:error, _} -> socket |> assign(:conclusion, Session.conclude(session)) |> render_result()
     end
+  end
 
-    def mount(_params, _session, socket) do
-        socket = assign(socket, :question_text, "What about second breakfast?")
-        if connected?(socket) do
-          Process.send_after(self(), :ping, 5_000)
-        end
-        {:ok, socket}
-    end
+  defp render_question(assigns) do
+    ~H"""
+    <div class="question">
+      <p class="question-text">
+        <%= @question.question_body %>
+      </p>
+      <%= for {answer, index} <- @question.answer_choices |> Enum.with_index() do %>
+        <button phx-click="answer" phx-value-question-id="networks:1:1124" {["phx-value-answer-id": index]}>
+          <%= answer %>
+        </button>
+      <% end %>
+    </div>
+    """
+  end
 
-    def handle_event("answer", value, socket) do
-      new_text = "You clicked #{inspect(value)}. " <> socket.assigns[:question_text]
-      {:noreply, assign(socket, :question_text, new_text)}
-    end
+  defp render_result(assigns) do
+    ~H"""
+    <div class="question">
+      <%= @conclusion %>
+    </div>
+    """
+  end
 
-    def handle_info(:ping, socket) do
-      new_text = "What about second breakfast? " <> socket.assigns[:question_text]
-      Process.send_after(self(), :ping, 5_000)
-      {:noreply, assign(socket, :question_text, new_text)}
-    end
+  def mount(_params, _session, socket) do
+    socket = assign(socket, :session, Session.new())
+
+    {:ok, socket}
+  end
+
+  def handle_event("answer", val= %{"answer-id" => answer}, socket = %{assigns: %{session: session}}) do
+    answer = String.to_integer(answer)
+    IO.inspect(answer)
+    {:ok, session} = Session.submit_answer(session, answer)
+    {:noreply, assign(socket, :session, session)}
+  end
+
 end
