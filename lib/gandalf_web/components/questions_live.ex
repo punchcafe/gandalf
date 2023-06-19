@@ -1,6 +1,7 @@
 defmodule GandalfWeb.QuestionsLive do
   use Phoenix.LiveView
   alias Gandalf.Session
+  import GandalfWeb.CoreComponents
 
   def render(socket = %{session: session}) do
     case Session.next_question(session) do
@@ -11,14 +12,14 @@ defmodule GandalfWeb.QuestionsLive do
 
   defp render_question(assigns) do
     ~H"""
-    <div class="question">
-      <p class="question-text">
+    <div class="question place-items-center w-full">
+      <p class="question-text mb-10 px-20">
         <%= @question.question_body %>
       </p>
       <%= for {answer, index} <- @question.answer_choices |> Enum.with_index() do %>
-        <button phx-click="answer" phx-value-question-id="networks:1:1124" {["phx-value-answer-id": index]}>
+        <.button phx-click="answer" class="answer-button mb-3" phx-value-question-id="networks:1:1124" {["phx-value-answer-id": index]}>
           <%= answer %>
-        </button>
+        </.button>
       <% end %>
     </div>
     """
