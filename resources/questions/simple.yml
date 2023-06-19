@@ -1,0 +1,26 @@
+category: simple
+questions:
+  - text: "What is 2 plus 3"
+    answers:
+      - 1
+      - 2
+      - 5
+      - 3
+    correct_answer: 3
+  - text: "What is 4 plus 3"
+    answers:
+      - 1
+      - 2
+      - 5
+      - 3
+    correct_answer: 4
+  - text: "What is 5 plus 5"
+    answers:
+      - 10
+      - 2
+      - 5
+      - 3
+    correct_answer: 1
+  
+  
+  

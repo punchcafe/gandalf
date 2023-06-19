@@ -1,4 +1,6 @@
 defmodule Gandalf.Session do
+
+  alias Gandalf.Question.Repo, as: Repo
   # @type session_configuration :: map()
   # @type session :: String.t()
   # @type question_id :: String.t()
@@ -10,24 +12,6 @@ defmodule Gandalf.Session do
 
   # @spec submit_answer(session(), answer_index :: integer()) :: :ok | {:error, atom()}
 
-  @sample_questions [
-    %{
-      question_body: "what's two plus three?",
-      answer_choices: ["1", "2", "3", "5"],
-      correct_answer_index: 3
-    },
-    %{
-      question_body: "what's three plus four?",
-      answer_choices: ["7", "2", "3", "5"],
-      correct_answer_index: 0
-    },
-    %{
-      question_body: "what's one plus one?",
-      answer_choices: ["1", "2", "3", "5"],
-      correct_answer_index: 1
-    }
-  ]
-
   @type question :: %{
           question_body: String.t(),
           answer_choices: [String.t()],
@@ -35,7 +19,7 @@ defmodule Gandalf.Session do
         }
   defstruct [:answers, :questions]
 
-  def new(), do: %__MODULE__{answers: [], questions: @sample_questions}
+  def new(), do: %__MODULE__{answers: [], questions: Repo.all()}
 
   def next_question(%__MODULE__{
         answers: answers,
