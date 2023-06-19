@@ -15,7 +15,7 @@ defmodule Gandalf.Question.Repo do
         if File.dir?(file) do
             file
             |> File.ls!()
-            |> Enum.map(& file <> &1)
+            |> Enum.map(& file <> "/" <> &1)
             |> Enum.flat_map(&all/1)
         else
             file

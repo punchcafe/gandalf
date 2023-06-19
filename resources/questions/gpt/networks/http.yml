@@ -1,0 +1,41 @@
+category: "networks:http"
+questions: 
+  - text: "What is the difference between HTTP and HTTPS?"
+    answers:
+      - "HTTP is a secure version of HTTPS."
+      - "HTTP operates on port 80, while HTTPS operates on port 443."
+      - "HTTP is stateful, while HTTPS is stateless."
+      - "HTTP uses TCP as the transport protocol, while HTTPS uses UDP."
+    correct_answer: 2
+
+  - text: "What are the primary HTTP request methods used for retrieving data from a server?"
+    answers:
+      - "GET and POST"
+      - "PUT and DELETE"
+      - "HEAD and OPTIONS"
+      - "TRACE and CONNECT"
+    correct_answer: 1
+
+  - text: "Which HTTP response status code indicates that the requested resource was successfully processed and returned to the client?"
+    answers:
+      - "200 OK"
+      - "301 Moved Permanently"
+      - "404 Not Found"
+      - "500 Internal Server Error"
+    correct_answer: 1
+
+  - text: "What is the purpose of the 'Content-Type' header field in an HTTP request or response?"
+    answers:
+      - "To specify the encoding format of the payload"
+      - "To indicate the length of the content"
+      - "To define the cache control directives"
+      - "To describe the media type of the content"
+    correct_answer: 4
+
+  - text: "What is the purpose of the 'ETag' header field in an HTTP response?"
+    answers:
+      - "To specify the date and time the resource was last modified"
+      - "To indicate the length of the content"
+      - "To provide a unique identifier for a specific version of a resource"
+      - "To define the cache control directives"
+    correct_answer: 3
