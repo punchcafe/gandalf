@@ -1,0 +1,41 @@
+category: "databases:rds"
+questions:
+  - text: "What is a primary key in a relational database?"
+    answers:
+      - "A unique identifier for a table"
+      - "A field that holds numeric values"
+      - "A data type used to store text"
+      - "A join operation between two tables"
+    correct_answer: 1
+
+  - text: "What is the purpose of foreign keys in a relational database?"
+    answers:
+      - "To establish relationships between tables"
+      - "To perform mathematical calculations"
+      - "To store large binary data"
+      - "To group rows based on specific criteria"
+    correct_answer: 1
+
+  - text: "What is normalization in the context of database design?"
+    answers:
+      - "The process of converting data into a human-readable format"
+      - "The process of breaking down a large table into smaller tables"
+      - "The process of encrypting sensitive data in the database"
+      - "The process of improving database performance through caching"
+    correct_answer: 2
+
+  - text: "What is a SQL join?"
+    answers:
+      - "A method for sorting data in a table"
+      - "A way to merge two or more databases into one"
+      - "A technique for combining rows from different tables based on related columns"
+      - "A function to filter data based on specific conditions"
+    correct_answer: 3
+
+  - text: "What is the difference between a primary key and a unique key in a database?"
+    answers:
+      - "A primary key must be unique, but a unique key can have duplicate values"
+      - "A primary key can be composed of multiple columns, while a unique key cannot"
+      - "A primary key is required for all tables, but a unique key is optional"
+      - "There is no difference; the terms can be used interchangeably"
+    correct_answer: 1
