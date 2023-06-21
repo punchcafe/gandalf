@@ -1,4 +1,4 @@
-category: "databases:rds"
+topic: "databases:rds"
 questions:
   - text: "What is a primary key in a relational database?"
     answers:

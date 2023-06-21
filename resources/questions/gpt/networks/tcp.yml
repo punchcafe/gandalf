@@ -1,4 +1,4 @@
-category: "networks:tcp"
+topic: "networks:tcp"
 questions:
   - text: "Which three-way handshake process is used by TCP to establish a connection between two network devices?"
     answers:

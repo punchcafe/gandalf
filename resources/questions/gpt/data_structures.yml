@@ -1,4 +1,4 @@
-category: data_structures
+topic: data_structures
 questions:
   - text: "Which data structure follows the Last-In-First-Out (LIFO) principle?"
     answers:

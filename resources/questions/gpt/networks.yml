@@ -1,4 +1,4 @@
-category: networks
+topic: networks
 questions:  
   - text: "Which layer of the OSI model is responsible for establishing, managing, and terminating connections between devices?"
     answers:

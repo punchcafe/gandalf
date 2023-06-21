@@ -1,4 +1,4 @@
-category: "networks:http"
+topic: "networks:http"
 questions: 
   - text: "What is the difference between HTTP and HTTPS?"
     answers:
