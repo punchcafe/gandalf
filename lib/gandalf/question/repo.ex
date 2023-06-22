@@ -2,18 +2,33 @@ defmodule Gandalf.Question.Repo do
   alias Gandalf.{Topic, Question}
 
   def all(depth \\ 1, query \\ []) do
-    exclude_list = Keyword.get(query, :exclude, [])
+    exclude_list = query_list(query, :exclude)
+    include_list = query_list(query, :include)
 
     "./resources/questions/"
     |> read_all()
-    |> Enum.filter(&matches_depth?(&1, depth))
-    |> Enum.reject(fn %{"topic" => topic} -> topic_excluded?(topic, exclude_list) end)
-    |> Enum.map(&extract_questions/1)
+    |> Stream.filter(&matches_depth?(&1, depth))
+    |> Enum.reject(fn %{"topic" => topic} -> topic_matches?(topic, exclude_list) end)
+    |> Enum.filter(fn %{"topic" => topic} ->
+      if include_list == [] do
+        true
+      else
+        topic_matches?(topic, include_list)
+      end
+    end)
+    |> Enum.flat_map(&extract_questions/1)
   end
 
-  defp topic_excluded?(topic, exclude_list) do
-    Enum.any?(exclude_list, fn excluded_topic ->
-      excluded_topic == topic or Topic.subtopic_of?(topic, excluded_topic)
+  defp query_list(query_opts, key) do
+    case Keyword.get(query_opts, key, []) do
+      filter_values when is_list(filter_values) -> filter_values
+      filter_values when is_binary(filter_values) -> [filter_values]
+    end
+  end
+
+  defp topic_matches?(topic, topic_list) do
+    Enum.any?(topic_list, fn topic_in_list ->
+      topic_in_list == topic or Topic.subtopic_of?(topic, topic_in_list)
     end)
   end
 
