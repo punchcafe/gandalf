@@ -6,7 +6,7 @@ defmodule GandalfWeb.QuestionsLive do
   def render(socket = %{session: session}) do
     case Session.next_question(session) do
       {:ok, question} -> socket |> assign(:question, question) |> render_question()
-      {:error, _} -> socket |> assign(:conclusion, Session.conclude(session)) |> render_result()
+      :finished -> socket |> assign(:conclusion, Session.conclude(session)) |> render_result()
     end
   end
 
@@ -51,7 +51,7 @@ defmodule GandalfWeb.QuestionsLive do
       ) do
     answer = String.to_integer(answer)
     IO.inspect(answer)
-    {:ok, session} = Session.submit_answer(session, answer)
+    {_, session} = Session.submit_answer(session, answer)
     {:noreply, assign(socket, :session, session)}
   end
 end

@@ -35,7 +35,7 @@ defmodule Gandalf.Session do
     if next_answer_index < Enum.count(questions) do
       {:ok, Enum.at(questions, Enum.count(answers))}
     else
-      {:error, :quiz_finished}
+      :finished
     end
   end
 
@@ -49,7 +49,7 @@ defmodule Gandalf.Session do
         {:ok, updated_session}
       end
     else
-      {:finished, :session}
+      {:finished, session}
     end
   end
 
@@ -87,10 +87,8 @@ defmodule Gandalf.Session do
     struct
   end
 
-  def conclude(%__MODULE__{answers: answers, questions: questions}) do
-    total_questions = Enum.count(questions)
-    score = get_score(questions, answers, 0)
-    "You scored #{score} out #{total_questions}"
+  def conclude(%__MODULE__{failed_topics: failed_topics}) do
+    "You need to practice #{Enum.join(failed_topics, " ")}."
   end
 
   defp get_score([], [], total), do: total
