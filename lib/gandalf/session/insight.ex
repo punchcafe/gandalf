@@ -2,6 +2,10 @@ defmodule Gandalf.Session.Insight do
   alias Gandalf.Topic
   alias Gandalf.Session
 
+  @type insight :: %{Topic.t() => Float.t()}
+
+  @failed_threshold 0.5
+
   def last_depth_insight(%Session{questions: questions, answers: answers}) do
     last_depth = questions |> List.last() |> Map.get(:topic) |> Topic.depth()
 
@@ -15,6 +19,16 @@ defmodule Gandalf.Session.Insight do
     |> Enum.group_by(fn {topic, _?} -> topic end, fn {_, correct?} -> correct? end)
     |> Enum.map(fn {topic, answers} -> {topic, average_correct_answers(answers)} end)
     |> Enum.into(%{})
+  end
+
+  def partition_insight(insight) do
+    Enum.reduce(insight, {[], []}, fn {topic, average}, {succeded_topics, failed_topics} -> 
+      if average < @failed_threshold do
+        {succeded_topics, [topic | failed_topics]}
+      else
+        {[topic | succeded_topics], failed_topics}
+      end
+    end)
   end
 
   defp average_correct_answers(answers) do
