@@ -6,8 +6,12 @@ defmodule Gandalf.Session.Insight do
 
   @failed_threshold 0.5
 
-  def last_depth_insight(%Session{questions: questions, answers: answers}) do
-    last_depth = questions |> List.last() |> Map.get(:topic) |> Topic.depth()
+  def last_question_depth(%Session{questions: questions, answers: answers}) do
+    questions |> List.last() |> Map.get(:topic) |> Topic.depth()
+  end
+
+  def last_depth_insight(session = %Session{questions: questions, answers: answers}) do
+    last_depth = last_question_depth(session)
 
     questions
     |> Stream.zip(answers)
@@ -22,7 +26,7 @@ defmodule Gandalf.Session.Insight do
   end
 
   def partition_insight(insight) do
-    Enum.reduce(insight, {[], []}, fn {topic, average}, {succeded_topics, failed_topics} -> 
+    Enum.reduce(insight, {[], []}, fn {topic, average}, {succeded_topics, failed_topics} ->
       if average < @failed_threshold do
         {succeded_topics, [topic | failed_topics]}
       else
