@@ -1,0 +1,41 @@
+topic: "networks:tcp"
+questions:
+  - text: "Which three-way handshake process is used by TCP to establish a connection between two network devices?"
+    answers:
+      - "SYN-ACK-SYN"
+      - "SYN-SYN-ACK"
+      - "ACK-SYN-ACK"
+      - "ACK-ACK-ACK"
+    correct_answer: 2
+
+  - text: "What is the purpose of TCP's sequence number field?"
+    answers:
+      - "To identify the source and destination ports"
+      - "To provide flow control and manage data segments"
+      - "To indicate the acknowledgment number"
+      - "To ensure the integrity of the transmitted data"
+    correct_answer: 2
+
+  - text: "Which TCP mechanism is used to avoid network congestion by dynamically adjusting the sending rate?"
+    answers:
+      - "Flow control"
+      - "Error control"
+      - "Congestion control"
+      - "Windowing"
+    correct_answer: 3
+
+  - text: "What is the purpose of the TCP window size?"
+    answers:
+      - "To manage the flow of packets"
+      - "To ensure reliable data transmission"
+      - "To control the congestion in the network"
+      - "To specify the number of bytes that can be sent before receiving an acknowledgment"
+    correct_answer: 4
+
+  - text: "Which TCP flag is used to request the termination of a connection between two devices?"
+    answers:
+      - "ACK"
+      - "FIN"
+      - "SYN"
+      - "RST"
+    correct_answer: 2

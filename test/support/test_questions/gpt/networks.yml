@@ -1,0 +1,41 @@
+topic: networks
+questions:  
+  - text: "Which layer of the OSI model is responsible for establishing, managing, and terminating connections between devices?"
+    answers:
+      - "Physical layer"
+      - "Data link layer"
+      - "Transport layer"
+      - "Session layer"
+    correct_answer: 3
+
+  - text: "Which network topology requires a central device to manage the flow of data between other devices?"
+    answers:
+      - "Bus"
+      - "Star"
+      - "Ring"
+      - "Mesh"
+    correct_answer: 2
+
+  - text: "Which protocol is used to dynamically assign IP addresses to network devices?"
+    answers:
+      - "TCP"
+      - "DHCP"
+      - "DNS"
+      - "HTTP"
+    correct_answer: 2
+
+  - text: "Which network addressing scheme allows for the largest number of unique addresses?"
+    answers:
+      - "IPv4"
+      - "IPv6"
+      - "MAC"
+      - "CIDR"
+    correct_answer: 2
+
+  - text: "Which transport layer protocol provides reliable, connection-oriented communication between network devices?"
+    answers:
+      - "UDP"
+      - "HTTP"
+      - "FTP"
+      - "TCP"
+    correct_answer: 4

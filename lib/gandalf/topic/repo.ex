@@ -1,7 +1,6 @@
 defmodule Gandalf.Topic.Repo do
-
   alias Gandalf.Topic
-  
+
   def all_topics() do
     "./resources/questions/"
     |> read_all()

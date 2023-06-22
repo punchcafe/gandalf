@@ -1,0 +1,41 @@
+topic: databases
+questions:
+  - text: "Which type of database organizes data into tables with rows and columns?"
+    answers:
+      - "Relational database"
+      - "NoSQL database"
+      - "Graph database"
+      - "Hierarchical database"
+    correct_answer: 1
+
+  - text: "What is the purpose of an index in a database?"
+    answers:
+      - "To provide an additional layer of security for data"
+      - "To enforce referential integrity constraints"
+      - "To improve the speed of data retrieval operations"
+      - "To control access permissions to database objects"
+    correct_answer: 3
+
+  - text: "Which type of database model represents data as a collection of key-value pairs?"
+    answers:
+      - "Relational database"
+      - "Object-oriented database"
+      - "Document-oriented database"
+      - "Key-value store"
+    correct_answer: 4
+
+  - text: "What is the ACID acronym in database systems?"
+    answers:
+      - "Atomicity, Consistency, Isolation, Durability"
+      - "Availability, Consistency, Integrity, Durability"
+      - "Atomicity, Concurrency, Integrity, Durability"
+      - "Availability, Concurrency, Isolation, Durability"
+    correct_answer: 1
+
+  - text: "Which database query language is used to retrieve data from a relational database?"
+    answers:
+      - "SQL"
+      - "JSON"
+      - "XML"
+      - "NoSQL"
+    correct_answer: 1

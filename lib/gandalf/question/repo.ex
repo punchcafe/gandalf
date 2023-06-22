@@ -5,7 +5,9 @@ defmodule Gandalf.Question.Repo do
     exclude_list = query_list(query, :exclude)
     include_list = query_list(query, :include)
 
-    "./resources/questions/"
+    :gandalf
+    |> Application.fetch_env!(Gandalf.Question.Repo)
+    |> Keyword.get(:questions_dir)
     |> read_all()
     |> Stream.filter(&matches_depth?(&1, depth))
     |> Enum.reject(fn %{"topic" => topic} -> topic_matches?(topic, exclude_list) end)

@@ -1,0 +1,41 @@
+topic: data_structures
+questions:
+  - text: "Which data structure follows the Last-In-First-Out (LIFO) principle?"
+    answers:
+      - "Queue"
+      - "Stack"
+      - "Linked list"
+      - "Binary tree"
+    correct_answer: 2
+
+  - text: "Which data structure provides constant-time access to its elements?"
+    answers:
+      - "Array"
+      - "Stack"
+      - "Queue"
+      - "Linked list"
+    correct_answer: 1
+
+  - text: "Which data structure represents a hierarchical relationship between elements?"
+    answers:
+      - "Stack"
+      - "Queue"
+      - "Tree"
+      - "Hash table"
+    correct_answer: 3
+
+  - text: "Which data structure allows efficient searching, insertion, and deletion operations, with each operation taking O(log n) time?"
+    answers:
+      - "Array"
+      - "Linked list"
+      - "Queue"
+      - "Binary search tree"
+    correct_answer: 4
+
+  - text: "Which data structure uses both the FIFO (First-In-First-Out) and LIFO (Last-In-First-Out) principles?"
+    answers:
+      - "Queue"
+      - "Stack"
+      - "Linked list"
+      - "Tree"
+    correct_answer: 3

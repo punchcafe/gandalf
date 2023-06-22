@@ -1,4 +1,7 @@
 defmodule Gandalf.Session.Insight do
+  @moduledoc ~S"""
+  Module for deriving information and state from a session struct.
+  """
   alias Gandalf.Topic
   alias Gandalf.Session
 

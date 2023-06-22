@@ -7,8 +7,7 @@
 # General application configuration
 import Config
 
-config :gandalf,
-  ecto_repos: [Gandalf.Repo]
+config :gandalf, Gandalf.Question.Repo, questions_dir: "./resources/questions/"
 
 # Configures the endpoint
 config :gandalf, GandalfWeb.Endpoint,
