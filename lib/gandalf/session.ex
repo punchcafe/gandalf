@@ -2,22 +2,22 @@ defmodule Gandalf.Session do
   alias Gandalf.Question.Repo
   alias Gandalf.Topic.Repo, as: TopicRepo
   alias Gandalf.Topic
-  alias __MODULE__.Insight
-
-  @finish_failed_topic_count 5
+  alias __MODULE__.{Insight, Config}
 
   @type question :: %{
           question_body: String.t(),
           answer_choices: [String.t()],
           correct_answer_index: integer()
         }
-  defstruct [:answers, :questions]
+  defstruct [:answers, :questions, :config]
 
-  def new(), do: %__MODULE__{answers: [], questions: Repo.all(1)}
+  def new(config = %Config{}),
+    do: %__MODULE__{answers: [], questions: Repo.all(1), config: config}
 
   def next_question(%__MODULE__{
         answers: answers,
-        questions: questions
+        questions: questions,
+        config: config
       }) do
     next_answer_index = Enum.count(answers)
 
@@ -28,12 +28,13 @@ defmodule Gandalf.Session do
     end
   end
 
-  def submit_answer(session = %__MODULE__{answers: answers}, answer_index) do
+  def submit_answer(session = %__MODULE__{answers: answers, config: config}, answer_index) do
     if Enum.count(answers) < Enum.count(session.questions) do
       updated_session = %__MODULE__{session | answers: answers ++ [answer_index]}
 
       cond do
-        updated_session |> Insight.failed_topics() |> Enum.count() >= @finish_failed_topic_count ->
+        updated_session |> Insight.failed_topics() |> Enum.count() >=
+            Config.max_topic_suggestions(config) ->
           {:finished, updated_session}
 
         Enum.count(updated_session.answers) == Enum.count(session.questions) ->
@@ -58,7 +59,7 @@ defmodule Gandalf.Session do
     success_topics =
       session
       |> Insight.successful_topics()
-      |> Enum.filter(& Topic.depth(&1) == last_depth)
+      |> Enum.filter(&(Topic.depth(&1) == last_depth))
 
     with [_ | _] <- success_topics,
          next_questions = [_ | _] <- Repo.all(last_depth + 1, include: success_topics) do

@@ -67,3 +67,8 @@ config :phoenix, :plug_init_mode, :runtime
 
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
+
+config :gandalf, Gandalf.Session.Config,
+  questions_per_topic: 5,
+  failure_threshold: 0.5,
+  max_topic_suggestions: 5

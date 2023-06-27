@@ -20,3 +20,8 @@ config :logger, level: :warning
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :gandalf, Gandalf.Session.Config,
+  questions_per_topic: 5,
+  failure_threshold: 0.5,
+  max_topic_suggestions: 5

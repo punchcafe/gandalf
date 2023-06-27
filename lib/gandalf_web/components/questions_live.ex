@@ -39,7 +39,13 @@ defmodule GandalfWeb.QuestionsLive do
   end
 
   def mount(_params, _session, socket) do
-    socket = assign(socket, :session, Session.new())
+    session =
+      :gandalf
+      |> Application.fetch_env!(Gandalf.Session.Config)
+      |> Session.Config.new()
+      |> Session.new()
+
+    socket = assign(socket, :session, session)
 
     {:ok, socket}
   end
