@@ -22,6 +22,6 @@ config :logger, level: :warning
 config :phoenix, :plug_init_mode, :runtime
 
 config :gandalf, Gandalf.Session.Config,
-  questions_per_topic: 5,
-  failure_threshold: 0.5,
-  max_topic_suggestions: 5
+  questions_per_topic: 3,
+  failure_threshold: 0.6,
+  max_topic_suggestions: 1
