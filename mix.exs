@@ -50,8 +50,7 @@ defmodule Gandalf.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:yaml_elixir, ">= 0.0.0"},
-      {:cabbage, ">= 0.0.0"}
+      {:yaml_elixir, ">= 0.0.0"}
     ]
   end
 

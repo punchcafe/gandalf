@@ -70,8 +70,10 @@ defmodule Gandalf.Session do
   end
 
   def submit_answer!(struct, answer_index) do
-    {:ok, struct} = submit_answer(struct, answer_index)
-    struct
+    case submit_answer(struct, answer_index) do
+      {:ok, struct} -> struct
+      {:finished, struct} -> struct
+    end
   end
 
   def conclude(session) do
