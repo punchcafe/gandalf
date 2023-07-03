@@ -5,6 +5,7 @@ defmodule MyApp.Features.QuizTest do
 
   @questions_per_topic 3
   @top_level_topics 3
+  @number_of_sub_topics 3
 
   setup do
     config =
@@ -53,6 +54,18 @@ defmodule MyApp.Features.QuizTest do
 
     assert_test_over(result)
     assert_suggested_topics(session, ["data_structures", "databases:rds"])
+  end
+
+  test "test is over when questions run out, and returns no suggestions", %{session: session} do
+    result =
+      {_, session} =
+      answer_correctly(
+        session,
+        @questions_per_topic * (@top_level_topics + @number_of_sub_topics)
+      )
+
+    assert_test_over(result)
+    assert_suggested_topics(session, [])
   end
 
   defp answer_incorrectly(session, number_of_times \\ 1) do
