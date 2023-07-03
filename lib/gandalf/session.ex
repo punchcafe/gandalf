@@ -11,8 +11,14 @@ defmodule Gandalf.Session do
         }
   defstruct [:answers, :questions, :config]
 
-  def new(config = %Config{}),
-    do: %__MODULE__{answers: [], questions: Repo.all(1), config: config}
+  def new(config = %Config{}) do
+    initial_questions =
+      1
+      |> Repo.all()
+      |> shuffle_and_take(Config.questions_per_topic(config))
+
+    %__MODULE__{answers: [], questions: initial_questions, config: config}
+  end
 
   def next_question(%__MODULE__{
         answers: answers,
@@ -51,7 +57,8 @@ defmodule Gandalf.Session do
   defp load_next_or_finish(
          session = %__MODULE__{
            questions: questions,
-           answers: answers
+           answers: answers,
+           config: config
          }
        ) do
     last_depth = Insight.last_question_depth(session)
@@ -62,11 +69,22 @@ defmodule Gandalf.Session do
       |> Enum.filter(&(Topic.depth(&1) == last_depth))
 
     with [_ | _] <- success_topics,
-         next_questions = [_ | _] <- Repo.all(last_depth + 1, include: success_topics) do
+         all_next_questions = [_ | _] <- Repo.all(last_depth + 1, include: success_topics) do
+      next_questions = shuffle_and_take(all_next_questions, Config.questions_per_topic(config))
       {:ok, %__MODULE__{session | questions: questions ++ next_questions}}
     else
       _ -> {:finished, session}
     end
+  end
+
+  defp shuffle_and_take(questions, questions_per_topic) do
+    questions
+    |> Enum.group_by(& &1.topic)
+    |> Enum.flat_map(fn {_topic, questions} ->
+      questions
+      |> Enum.shuffle()
+      |> Enum.take(questions_per_topic)
+    end)
   end
 
   def submit_answer!(struct, answer_index) do
