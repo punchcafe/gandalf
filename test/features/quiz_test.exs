@@ -45,10 +45,9 @@ defmodule MyApp.Features.QuizTest do
   test "returns a mix of top level and sub level suggestions", %{session: session} do
     session = %{session | config: %{session.config | max_topic_suggestions: 2}}
 
-    result = {_, session} = answer_incorrectly(session, @questions_per_topic)
+    {_, session} = answer_incorrectly(session, @questions_per_topic)
 
-    result =
-      {_, session} = answer_correctly(session, @questions_per_topic * (@top_level_topics - 1))
+    {_, session} = answer_correctly(session, @questions_per_topic * (@top_level_topics - 1))
 
     result = {_, session} = answer_incorrectly(session, @questions_per_topic)
 
@@ -69,17 +68,15 @@ defmodule MyApp.Features.QuizTest do
   end
 
   defp answer_incorrectly(session, number_of_times \\ 1) do
-    session =
-      Enum.reduce(1..number_of_times, {:ok, session}, fn _, {_, session} ->
-        Session.submit_answer(session, next_incorrect_answer(session))
-      end)
+    Enum.reduce(1..number_of_times, {:ok, session}, fn _, {_, session} ->
+      Session.submit_answer(session, next_incorrect_answer(session))
+    end)
   end
 
   defp answer_correctly(session, number_of_times \\ 1) do
-    session =
-      Enum.reduce(1..number_of_times, {:ok, session}, fn _, {_, session} ->
-        Session.submit_answer(session, next_correct_answer(session))
-      end)
+    Enum.reduce(1..number_of_times, {:ok, session}, fn _, {_, session} ->
+      Session.submit_answer(session, next_correct_answer(session))
+    end)
   end
 
   defp next_correct_answer(session) do

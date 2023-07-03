@@ -36,7 +36,7 @@ defmodule Gandalf.Question.RepoTest do
 
     test ":include and :exclude parameters can be strings or lists of strings" do
       for filter_key <- [:include, :exclude] do
-        Repo.all(1, [{filter_key, "databases"}]) == Repo.all(1, [{filter_key, ["databases"]}])
+        assert Repo.all(1, [{filter_key, "databases"}]) == Repo.all(1, [{filter_key, ["databases"]}])
       end
     end
 
