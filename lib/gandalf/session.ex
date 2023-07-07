@@ -63,13 +63,12 @@ defmodule Gandalf.Session do
        ) do
     last_depth = Insight.last_question_depth(session)
 
-    success_topics =
+    failed_topics =
       session
-      |> Insight.successful_topics()
+      |> Insight.failed_topics()
       |> Enum.filter(&(Topic.depth(&1) == last_depth))
 
-    with [_ | _] <- success_topics,
-         all_next_questions = [_ | _] <- Repo.all(last_depth + 1, include: success_topics) do
+    with all_next_questions = [_ | _] <- Repo.all(last_depth + 1, exclude: failed_topics) do
       next_questions = shuffle_and_take(all_next_questions, Config.questions_per_topic(config))
       {:ok, %__MODULE__{session | questions: questions ++ next_questions}}
     else
