@@ -23,7 +23,7 @@ defmodule MyApp.Features.QuizTest do
   test "Returns top level suggestion", %{session: session} do
     result = {_, session} = answer_incorrectly(session, @questions_per_topic)
     assert_test_over(result)
-    assert_suggested_topics(session, "data_structures")
+    assert_suggested_topics(session, "networks")
   end
 
   describe "included_topics opt" do
@@ -46,9 +46,28 @@ defmodule MyApp.Features.QuizTest do
       assert_suggested_topics(session, "databases")
     end
 
+    test "orders by :included_topics option" do
+      session =
+        [
+          failure_threshold: 0.6,
+          max_topic_suggestions: 2,
+          questions_per_topic: @questions_per_topic,
+          included_topics: ["networks", "data_structures", "databases"]
+        ]
+        |> Session.Config.new()
+        |> Session.new()
+
+      # Answer correctly for first 3 (should be networks)
+      {_, session} = answer_correctly(session, @questions_per_topic)
+      # Answer incorrectly for next 6 (should be data_structures and databases)
+      result = {_, session} = answer_incorrectly(session, @questions_per_topic * 2)
+      assert_test_over(result)
+      assert_suggested_topics(session, ["data_structures", "databases"])
+    end
+
     test "Will include subtopics for higher level include", %{session: session} do
       # Answer correctly for first 3 questions: databases
-      result = {_, session} = answer_correctly(session, @questions_per_topic)
+      {_, session} = answer_correctly(session, @questions_per_topic)
       # Answer incorrectly for what should be databases:rds
       result = {_, session} = answer_incorrectly(session, @questions_per_topic)
       assert_test_over(result)
@@ -57,7 +76,7 @@ defmodule MyApp.Features.QuizTest do
 
     test "Will include subtopic questions", %{session: session} do
       # Answer correctly for first 6 questions, databases, databases:rds
-      result = {_, session} = answer_correctly(session, @questions_per_topic * 2)
+      {_, session} = answer_correctly(session, @questions_per_topic * 2)
       result = {_, session} = answer_incorrectly(session, @questions_per_topic)
       assert_test_over(result)
       assert_suggested_topics(session, "networks:http")
@@ -80,7 +99,7 @@ defmodule MyApp.Features.QuizTest do
     result = {_, session} = answer_incorrectly(session, @questions_per_topic)
 
     assert_test_over(result)
-    assert_suggested_topics(session, "databases")
+    assert_suggested_topics(session, "data_structures")
   end
 
   test "Returns a subtopic suggestion", %{session: session} do
@@ -101,7 +120,7 @@ defmodule MyApp.Features.QuizTest do
     result = {_, session} = answer_incorrectly(session, @questions_per_topic)
 
     assert_test_over(result)
-    assert_suggested_topics(session, ["data_structures", "databases:rds"])
+    assert_suggested_topics(session, ["databases:rds", "networks"])
   end
 
   test "test is over when questions run out, and returns no suggestions", %{session: session} do

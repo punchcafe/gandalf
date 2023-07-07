@@ -1,6 +1,5 @@
 defmodule Gandalf.Session do
   alias Gandalf.Question.Repo
-  alias Gandalf.Topic.Repo, as: TopicRepo
   alias Gandalf.Topic
   alias __MODULE__.{Insight, Config}
 
@@ -16,14 +15,14 @@ defmodule Gandalf.Session do
       1
       |> Repo.all(include: Config.included_topics(config))
       |> shuffle_and_take(Config.questions_per_topic(config))
+      |> sort_by_included_topics(Config.included_topics(config))
 
     %__MODULE__{answers: [], questions: initial_questions, config: config}
   end
 
   def next_question(%__MODULE__{
         answers: answers,
-        questions: questions,
-        config: config
+        questions: questions
       }) do
     next_answer_index = Enum.count(answers)
 
@@ -54,10 +53,22 @@ defmodule Gandalf.Session do
     end
   end
 
+  defp sort_by_included_topics(questions, included_topics) do
+    topic_index_map =
+      included_topics
+      |> Enum.with_index()
+      |> Enum.into(%{})
+
+    question_comparator = fn question_a, question_b ->
+      topic_index_map[question_a.topic] <= topic_index_map[question_b.topic]
+    end
+
+    Enum.sort(questions, question_comparator)
+  end
+
   defp load_next_or_finish(
          session = %__MODULE__{
            questions: questions,
-           answers: answers,
            config: config
          }
        ) do
