@@ -14,7 +14,7 @@ defmodule Gandalf.Session do
   def new(config = %Config{}) do
     initial_questions =
       1
-      |> Repo.all()
+      |> Repo.all(include: Config.included_topics(config))
       |> shuffle_and_take(Config.questions_per_topic(config))
 
     %__MODULE__{answers: [], questions: initial_questions, config: config}
@@ -68,7 +68,11 @@ defmodule Gandalf.Session do
       |> Insight.failed_topics()
       |> Enum.filter(&(Topic.depth(&1) == last_depth))
 
-    with all_next_questions = [_ | _] <- Repo.all(last_depth + 1, exclude: failed_topics) do
+    with all_next_questions = [_ | _] <-
+           Repo.all(last_depth + 1,
+             exclude: failed_topics,
+             include: Config.included_topics(config)
+           ) do
       next_questions = shuffle_and_take(all_next_questions, Config.questions_per_topic(config))
       {:ok, %__MODULE__{session | questions: questions ++ next_questions}}
     else

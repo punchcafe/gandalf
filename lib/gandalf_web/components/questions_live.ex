@@ -42,6 +42,7 @@ defmodule GandalfWeb.QuestionsLive do
     session =
       :gandalf
       |> Application.fetch_env!(Gandalf.Session.Config)
+      |> Keyword.put(:included_topics, Gandalf.Topic.Repo.all_topics())
       |> Session.Config.new()
       |> Session.new()
 

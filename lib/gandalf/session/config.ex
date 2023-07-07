@@ -3,7 +3,12 @@ defmodule Gandalf.Session.Config do
   Configuration parameters for quiz sessions.
   """
   @opaque t :: struct()
-  @enforce_keys [:questions_per_topic, :failure_threshold, :max_topic_suggestions]
+  @enforce_keys [
+    :questions_per_topic,
+    :failure_threshold,
+    :max_topic_suggestions,
+    :included_topics
+  ]
   defstruct @enforce_keys
 
   @doc ~S"""
@@ -32,4 +37,7 @@ defmodule Gandalf.Session.Config do
 
   @spec failure_threshold(__MODULE__.t()) :: float()
   def failure_threshold(%__MODULE__{failure_threshold: failure_threshold}), do: failure_threshold
+
+  @spec included_topics(__MODULE__.t()) :: [String.t()]
+  def included_topics(%__MODULE__{included_topics: included_topics}), do: included_topics
 end
