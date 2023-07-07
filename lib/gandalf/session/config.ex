@@ -29,6 +29,10 @@ defmodule Gandalf.Session.Config do
     struct!(__MODULE__, opts)
   end
 
+  def set_included_topics(session = %__MODULE__{}, included_topics) do
+    %__MODULE__{session | included_topics: included_topics}
+  end
+
   @spec max_topic_suggestions(__MODULE__.t()) :: integer()
   def max_topic_suggestions(%__MODULE__{max_topic_suggestions: mts}), do: mts
 

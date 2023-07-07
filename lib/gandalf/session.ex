@@ -20,6 +20,17 @@ defmodule Gandalf.Session do
     %__MODULE__{answers: [], questions: initial_questions, config: config}
   end
 
+  # TODO: raise exception if no included topics set on start
+
+  def set_profile(session = %__MODULE__{config: config}, profile) do
+    included_topics = Gandalf.Profile.included_topics!(profile)
+    %__MODULE__{session | config: Config.set_included_topics(config, included_topics)}
+  end
+
+  def profile_set?(%__MODULE__{config: config}) do
+    Config.included_topics(config) && Config.included_topics(config) != []
+  end
+
   def next_question(%__MODULE__{
         answers: answers,
         questions: questions

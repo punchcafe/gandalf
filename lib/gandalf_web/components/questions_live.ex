@@ -4,9 +4,12 @@ defmodule GandalfWeb.QuestionsLive do
   import GandalfWeb.CoreComponents
 
   def render(socket = %{session: session}) do
-    case Session.next_question(session) do
-      {:ok, question} ->
-        socket |> assign(:question, question) |> render_question()
+    with true <- Session.profile_set?(session),
+         {:ok, question} <- Session.next_question(session) do
+      socket |> assign(:question, question) |> render_question()
+    else
+      false ->
+        render_topic_selection(socket)
 
       :finished ->
         conclusion =
@@ -36,6 +39,22 @@ defmodule GandalfWeb.QuestionsLive do
     """
   end
 
+  defp render_topic_selection(assigns) do
+    ~H"""
+    <div class="question place-items-center w-full">
+      <%= for profile <- Gandalf.Profile.all_profiles() do %>
+        <.button
+          phx-click="profile-selection"
+          class="answer-button mb-3"
+          {["phx-value-profile-selection-id": profile]}
+        >
+          <%= profile %>
+        </.button>
+      <% end %>
+    </div>
+    """
+  end
+
   defp render_result(assigns) do
     ~H"""
     <div class="question">
@@ -48,13 +67,22 @@ defmodule GandalfWeb.QuestionsLive do
     session =
       :gandalf
       |> Application.fetch_env!(Gandalf.Session.Config)
-      |> Keyword.put(:included_topics, Gandalf.Topic.Repo.all_topics())
+      |> Keyword.put(:included_topics, [])
       |> Session.Config.new()
       |> Session.new()
 
     socket = assign(socket, :session, session)
 
     {:ok, socket}
+  end
+
+  def handle_event(
+        "profile-selection",
+        val = %{"profile-selection-id" => profile},
+        socket = %{assigns: %{session: session}}
+      ) do
+    session = Session.set_profile(session, profile)
+    {:noreply, assign(socket, :session, session)}
   end
 
   def handle_event(
