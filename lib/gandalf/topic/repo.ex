@@ -1,6 +1,15 @@
 defmodule Gandalf.Topic.Repo do
-  alias Gandalf.Topic
+  @moduledoc ~S"""
+  Module for accessing Topics.
+  """
 
+  alias Gandalf.Topic
+  import Gandalf.YmlHelper
+
+  @doc ~S"""
+  Returns a list of all topics.
+  """
+  @spec all_topics() :: [Topic.t()]
   def all_topics() do
     "./resources/questions/"
     |> read_all()
@@ -8,18 +17,11 @@ defmodule Gandalf.Topic.Repo do
     |> Enum.uniq()
   end
 
+  @doc ~S"""
+  Returns a list of all subtopics for a given topic.
+  """
+  @spec subtopics(Topic.t()) :: [Topic.t()]
   def subtopics(topic) do
     Enum.filter(all_topics(), &Topic.subtopic_of?(&1, topic))
-  end
-
-  defp read_all(file) do
-    if File.dir?(file) do
-      file
-      |> File.ls!()
-      |> Enum.map(&(file <> "/" <> &1))
-      |> Enum.flat_map(&read_all/1)
-    else
-      [YamlElixir.read_from_file!(file)]
-    end
   end
 end

@@ -1,5 +1,6 @@
 defmodule Gandalf.Question.Repo do
   alias Gandalf.{Topic, Question}
+  import Gandalf.YmlHelper
 
   def all(depth \\ 1, query \\ []) do
     exclude_list = query_list(query, :exclude)
@@ -49,16 +50,5 @@ defmodule Gandalf.Question.Repo do
       correct_answer_index: correct_answer - 1,
       topic: topic
     }
-  end
-
-  defp read_all(file) do
-    if File.dir?(file) do
-      file
-      |> File.ls!()
-      |> Enum.map(&(file <> "/" <> &1))
-      |> Enum.flat_map(&read_all/1)
-    else
-      [YamlElixir.read_from_file!(file)]
-    end
   end
 end

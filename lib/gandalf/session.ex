@@ -107,8 +107,4 @@ defmodule Gandalf.Session do
       {:finished, struct} -> struct
     end
   end
-
-  def conclude(session) do
-    "You need to practice #{session |> Insight.failed_topics() |> Enum.join(" ")}."
-  end
 end

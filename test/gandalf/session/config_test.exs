@@ -19,12 +19,14 @@ defmodule Gandalf.Session.ConfigTest do
       assert %Config{
                questions_per_topic: questions_per_topic,
                failure_threshold: failure_threshold,
-               max_topic_suggestions: max_topic_suggestions
+               max_topic_suggestions: max_topic_suggestions,
+               included_topics: ["databases"]
              } ==
                Config.new(
                  questions_per_topic: questions_per_topic,
                  failure_threshold: failure_threshold,
-                 max_topic_suggestions: max_topic_suggestions
+                 max_topic_suggestions: max_topic_suggestions,
+                 included_topics: ["databases"]
                )
     end
   end

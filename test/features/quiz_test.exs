@@ -88,7 +88,7 @@ defmodule MyApp.Features.QuizTest do
       # Answer correctly for all 9 questions, databases, databases:rds, networks:http
       result = {_, session} = answer_correctly(session, @questions_per_topic * 3)
       assert_test_over(result)
-      assert_suggested_topics(session, "")
+      assert_suggested_topics(session, [])
     end
   end
 
@@ -165,8 +165,7 @@ defmodule MyApp.Features.QuizTest do
   end
 
   def assert_suggested_topics(session, topics) when is_list(topics) do
-    topics = Enum.join(topics, " ")
-    assert Session.conclude(session) == "You need to practice #{topics}."
+    assert Session.Insight.failed_topics(session) == topics
   end
 
   def assert_suggested_topics(session, topic), do: assert_suggested_topics(session, [topic])

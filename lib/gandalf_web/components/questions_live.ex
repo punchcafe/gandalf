@@ -5,8 +5,14 @@ defmodule GandalfWeb.QuestionsLive do
 
   def render(socket = %{session: session}) do
     case Session.next_question(session) do
-      {:ok, question} -> socket |> assign(:question, question) |> render_question()
-      :finished -> socket |> assign(:conclusion, Session.conclude(session)) |> render_result()
+      {:ok, question} ->
+        socket |> assign(:question, question) |> render_question()
+
+      :finished ->
+        conclusion =
+          "You need to practice #{session |> Session.failed_topics() |> Enum.join(" ")}"
+
+        socket |> assign(:conclusion, conclusion) |> render_result()
     end
   end
 
