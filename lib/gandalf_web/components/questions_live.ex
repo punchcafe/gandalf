@@ -13,7 +13,7 @@ defmodule GandalfWeb.QuestionsLive do
 
       :finished ->
         conclusion =
-          "You need to practice #{session |> Session.failed_topics() |> Enum.join(" ")}"
+          "You need to practice #{session |> Session.Insight.failed_topics() |> Enum.join(" ")}"
 
         socket |> assign(:conclusion, conclusion) |> render_result()
     end
@@ -91,7 +91,6 @@ defmodule GandalfWeb.QuestionsLive do
         socket = %{assigns: %{session: session}}
       ) do
     answer = String.to_integer(answer)
-    IO.inspect(answer)
     {_, session} = Session.submit_answer(session, answer)
     {:noreply, assign(socket, :session, session)}
   end
