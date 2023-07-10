@@ -8,27 +8,56 @@ defmodule Gandalf.Session do
           answer_choices: [String.t()],
           correct_answer_index: integer()
         }
+
+  @type t :: struct()
   defstruct [:answers, :questions, :config]
 
   def new(config = %Config{}) do
-    initial_questions =
-      1
-      |> Repo.all(include: Config.included_topics(config))
-      |> shuffle_and_take(Config.questions_per_topic(config))
-      |> sort_by_included_topics(Config.included_topics(config))
-
-    %__MODULE__{answers: [], questions: initial_questions, config: config}
+    %__MODULE__{answers: [], questions: [], config: config}
   end
 
-  # TODO: raise exception if no included topics set on start
+  @doc ~S"""
+    Returns the current stage of the quiz the user is in.
 
-  def set_profile(session = %__MODULE__{config: config}, profile) do
+    Possible stages are:
+      - profile_selection: the user still has to select which profile they are quizzing as
+      - answering_questions: the user is in the process of answering questions
+      - finished: the user has finished the quiz
+  """
+  @spec current_stage(__MODULE__.t()) :: :profile_selection | :answering_questions | :finished
+  def current_stage(session) do
+    with {:profile_set, true} <- {:profile_set, profile_set?(session)},
+         {:failed, false} <- {:failed, failed_topics_limit?(session)},
+         {:ok, question} <-
+           next_question(session) do
+      :answering_questions
+    else
+      {:profile_set, false} ->
+        :profile_selection
+
+      _ ->
+        :finished
+    end
+  end
+
+  def load_profile(session = %__MODULE__{config: config}, profile) do
     included_topics = Gandalf.Profile.included_topics!(profile)
-    %__MODULE__{session | config: Config.set_included_topics(config, included_topics)}
+
+    initial_questions =
+      1
+      |> Repo.all(include: included_topics)
+      |> shuffle_and_take(Config.questions_per_topic(config))
+      |> sort_by_included_topics(included_topics)
+
+    %__MODULE__{
+      session
+      | config: Config.set_included_topics(config, included_topics),
+        questions: initial_questions
+    }
   end
 
   def profile_set?(%__MODULE__{config: config}) do
-    Config.included_topics(config) && Config.included_topics(config) != []
+    not is_nil(Config.included_topics(config) && Config.included_topics(config) != [])
   end
 
   def next_question(%__MODULE__{
@@ -49,8 +78,7 @@ defmodule Gandalf.Session do
       updated_session = %__MODULE__{session | answers: answers ++ [answer_index]}
 
       cond do
-        updated_session |> Insight.failed_topics() |> Enum.count() >=
-            Config.max_topic_suggestions(config) ->
+        failed_topics_limit?(updated_session) ->
           {:finished, updated_session}
 
         Enum.count(updated_session.answers) == Enum.count(session.questions) ->
@@ -62,6 +90,12 @@ defmodule Gandalf.Session do
     else
       {:finished, session}
     end
+  end
+
+  defp failed_topics_limit?(session) do
+    session
+    |> Insight.failed_topics()
+    |> Enum.count() >= Config.max_topic_suggestions(session.config)
   end
 
   defp sort_by_included_topics(questions, included_topics) do

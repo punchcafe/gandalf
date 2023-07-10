@@ -6,10 +6,13 @@ defmodule Gandalf.Session.Config do
   @enforce_keys [
     :questions_per_topic,
     :failure_threshold,
-    :max_topic_suggestions,
+    :max_topic_suggestions
+  ]
+
+  @optional_keys [
     :included_topics
   ]
-  defstruct @enforce_keys
+  defstruct @enforce_keys ++ @optional_keys
 
   @doc ~S"""
   Create a new configuration struct with the following options:

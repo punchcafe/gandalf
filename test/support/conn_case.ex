@@ -32,7 +32,6 @@ defmodule GandalfWeb.ConnCase do
   end
 
   setup tags do
-    Gandalf.DataCase.setup_sandbox(tags)
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 end

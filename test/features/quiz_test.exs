@@ -1,8 +1,12 @@
 defmodule MyApp.Features.QuizTest do
-  use ExUnit.Case, async: false
+  use Gandalf.SessionCase, async: false
 
   alias Gandalf.Session
   alias Gandalf.Topic.Repo
+
+  use Patch
+
+  @test_profile "test_profile"
 
   @questions_per_topic 3
   @top_level_topics 3
@@ -13,11 +17,17 @@ defmodule MyApp.Features.QuizTest do
       Session.Config.new(
         failure_threshold: 0.6,
         max_topic_suggestions: 1,
-        questions_per_topic: @questions_per_topic,
-        included_topics: Repo.all_topics()
+        questions_per_topic: @questions_per_topic
       )
 
-    %{session: Session.new(config)}
+    define_custom_profile(Repo.all_topics())
+
+    session =
+      config
+      |> Session.new()
+      |> Session.load_profile(@test_profile)
+
+    %{session: session}
   end
 
   test "Returns top level suggestion", %{session: session} do
@@ -26,17 +36,23 @@ defmodule MyApp.Features.QuizTest do
     assert_suggested_topics(session, "networks")
   end
 
-  describe "included_topics opt" do
+  describe "included_topics opt through profile" do
     setup do
       config =
         Session.Config.new(
           failure_threshold: 0.6,
           max_topic_suggestions: 1,
-          questions_per_topic: @questions_per_topic,
-          included_topics: ["databases", "networks:http"]
+          questions_per_topic: @questions_per_topic
         )
 
-      %{session: Session.new(config)}
+      define_custom_profile(["databases", "networks:http"])
+
+      session =
+        config
+        |> Session.new()
+        |> Session.load_profile(@test_profile)
+
+      %{session: session}
     end
 
     test "first returned topic isn't data_structures", %{session: session} do
@@ -47,15 +63,17 @@ defmodule MyApp.Features.QuizTest do
     end
 
     test "orders by :included_topics option" do
+      define_custom_profile(["networks", "data_structures", "databases"])
+
       session =
         [
           failure_threshold: 0.6,
           max_topic_suggestions: 2,
-          questions_per_topic: @questions_per_topic,
-          included_topics: ["networks", "data_structures", "databases"]
+          questions_per_topic: @questions_per_topic
         ]
         |> Session.Config.new()
         |> Session.new()
+        |> Session.load_profile(@test_profile)
 
       # Answer correctly for first 3 (should be networks)
       {_, session} = answer_correctly(session, @questions_per_topic)
@@ -135,38 +153,7 @@ defmodule MyApp.Features.QuizTest do
     assert_suggested_topics(session, [])
   end
 
-  defp answer_incorrectly(session, number_of_times \\ 1) do
-    Enum.reduce(1..number_of_times, {:ok, session}, fn _, {_, session} ->
-      Session.submit_answer(session, next_incorrect_answer(session))
-    end)
+  defp define_custom_profile(topics) do
+    patch(Gandalf.Profile, :included_topics!, fn @test_profile -> topics end)
   end
-
-  defp answer_correctly(session, number_of_times \\ 1) do
-    Enum.reduce(1..number_of_times, {:ok, session}, fn _, {_, session} ->
-      Session.submit_answer(session, next_correct_answer(session))
-    end)
-  end
-
-  defp next_correct_answer(session) do
-    next_question_index = Enum.count(session.answers)
-    next_question = Enum.at(session.questions, next_question_index)
-    next_question.correct_answer_index
-  end
-
-  defp next_incorrect_answer(session) do
-    session
-    |> next_correct_answer()
-    |> Kernel.+(1)
-    |> rem(4)
-  end
-
-  def assert_test_over(result) do
-    assert {:finished, _} = result
-  end
-
-  def assert_suggested_topics(session, topics) when is_list(topics) do
-    assert Session.Insight.failed_topics(session) == topics
-  end
-
-  def assert_suggested_topics(session, topic), do: assert_suggested_topics(session, [topic])
 end

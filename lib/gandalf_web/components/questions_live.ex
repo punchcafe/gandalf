@@ -4,16 +4,16 @@ defmodule GandalfWeb.QuestionsLive do
   import GandalfWeb.CoreComponents
 
   def render(socket = %{session: session}) do
-    with true <- Session.profile_set?(session),
-         {:ok, question} <- Session.next_question(session) do
-      socket |> assign(:question, question) |> render_question()
-    else
-      false ->
-        render_topic_selection(socket)
+    case Session.current_stage(session) do
+      :profile_selection ->
+        render_profile_selection(socket)
+
+      :answering_questions ->
+        {:ok, question} = Session.next_question(session)
+        socket |> assign(:question, question) |> render_question()
 
       :finished ->
-        conclusion =
-          "You need to practice #{session |> Session.Insight.failed_topics() |> Enum.join(" ")}"
+        conclusion = "You need to practice #{session |> Session.Insight.failed_topics() |> Enum.join(" ")}"
 
         socket |> assign(:conclusion, conclusion) |> render_result()
     end
@@ -39,7 +39,7 @@ defmodule GandalfWeb.QuestionsLive do
     """
   end
 
-  defp render_topic_selection(assigns) do
+  defp render_profile_selection(assigns) do
     ~H"""
     <div class="question place-items-center w-full">
       <%= for profile <- Gandalf.Profile.all_profiles() do %>
@@ -67,7 +67,6 @@ defmodule GandalfWeb.QuestionsLive do
     session =
       :gandalf
       |> Application.fetch_env!(Gandalf.Session.Config)
-      |> Keyword.put(:included_topics, [])
       |> Session.Config.new()
       |> Session.new()
 
@@ -78,16 +77,16 @@ defmodule GandalfWeb.QuestionsLive do
 
   def handle_event(
         "profile-selection",
-        val = %{"profile-selection-id" => profile},
+        %{"profile-selection-id" => profile},
         socket = %{assigns: %{session: session}}
       ) do
-    session = Session.set_profile(session, profile)
+    session = Session.load_profile(session, profile)
     {:noreply, assign(socket, :session, session)}
   end
 
   def handle_event(
         "answer",
-        val = %{"answer-id" => answer},
+        %{"answer-id" => answer},
         socket = %{assigns: %{session: session}}
       ) do
     answer = String.to_integer(answer)
