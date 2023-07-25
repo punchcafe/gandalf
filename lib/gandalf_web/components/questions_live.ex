@@ -1,6 +1,7 @@
 defmodule GandalfWeb.QuestionsLive do
   use Phoenix.LiveView
   alias Gandalf.Session
+  alias Gandalf.Resource.Repo
   import GandalfWeb.CoreComponents
 
   def render(socket = %{session: session}) do
@@ -13,10 +14,13 @@ defmodule GandalfWeb.QuestionsLive do
         socket |> assign(:question, question) |> render_question()
 
       :finished ->
-        conclusion =
-          "You need to practice #{session |> Session.Insight.failed_topics() |> Enum.join(" ")}"
+        failed_topics = Session.Insight.failed_topics(session)
+        resources = Repo.topic_resources(failed_topics)
 
-        socket |> assign(:conclusion, conclusion) |> render_result()
+        socket 
+        |> assign(:topics, failed_topics) 
+        |> assign(:resources, resources) 
+        |> render_result()
     end
   end
 
@@ -59,7 +63,22 @@ defmodule GandalfWeb.QuestionsLive do
   defp render_result(assigns) do
     ~H"""
     <div class="question">
-      <%= @conclusion %>
+      It looks like you could do with a bit of practice in the following topics: <%= @topics %>
+      <div class="resources">
+        <%= for {topic, resources} <- @resources do %>
+          <div class="topic_resources">
+            <h2> <%= topic %> </h2>
+            <%= for resource <- resources do %>
+              <div>
+                <h4><a href={resource.link}><%= resource.name %></a> </h4>
+                <p>
+                  <%= resource.description %>
+                </p>
+              </div>
+            <% end %>
+          </div>
+        <% end %> 
+      </div>
     </div>
     """
   end
