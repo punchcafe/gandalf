@@ -1,0 +1,8 @@
+services:
+  gandalf:
+    build: .
+    ports:
+      - 127.0.0.1:4000:4000
+    environment:
+      SECRET_KEY_BASE: lQpCtttl9BV5w5jm13YTwK99jUvPd8cWBQ4Ic9RwRnGOcHv3UkkD35C4dKFqPp0j
+      PHX_SERVER: true
