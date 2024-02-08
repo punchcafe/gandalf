@@ -19,3 +19,8 @@ config :logger, level: :info
 
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.
+
+config :gandalf, Gandalf.Session.Config,
+  questions_per_topic: 5,
+  failure_threshold: 0.5,
+  max_topic_suggestions: 5
