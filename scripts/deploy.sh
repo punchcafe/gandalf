@@ -1,0 +1,1 @@
+flyctl deploy --env PHX_HOST="punchcafe-gandalf.fly.dev" --env PHX_SERVER="true"

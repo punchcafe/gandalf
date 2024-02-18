@@ -1,0 +1,1 @@
+flyctl scale count 0 -y
