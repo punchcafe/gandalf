@@ -1,0 +1,12 @@
+name: suspend-server
+on: [workflow_dispatch]
+jobs:
+  scale-instances-down:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: set-instances
+        env:
+          FLY_ACCESS_TOKEN: ${{ secrets.FLY_ACCESS_TOKEN }}
+        run: ./scripts/suspend.sh
