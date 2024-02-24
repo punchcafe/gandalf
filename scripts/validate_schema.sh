@@ -1,0 +1,1 @@
+mix validate_resources ./priv/schema/question_set.schema.json ./priv/resources/questions

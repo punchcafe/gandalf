@@ -1,0 +1,38 @@
+{
+    "title": "Question Set",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "topic",
+      "questions"
+    ],
+    "properties": {
+      "topic": {
+        "type": "string",
+        "description": "The topic all the questions in this set belong to."
+      },
+      "questions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "The question to display."
+            },
+            "correct_answer": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "answers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
