@@ -46,7 +46,7 @@ defmodule Gandalf.Session.Insight do
   end
 
   defp topic_success_ratios(
-         session = %Session{questions: questions, answers: answers, config: config}
+        %Session{questions: questions, answers: answers, config: config}
        ) do
     questions
     |> Stream.zip(answers)

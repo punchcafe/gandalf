@@ -28,7 +28,7 @@ defmodule Gandalf.Session do
   def current_stage(session) do
     with {:profile_set, true} <- {:profile_set, profile_set?(session)},
          {:failed, false} <- {:failed, failed_topics_limit?(session)},
-         {:ok, question} <-
+         {:ok, _question} <-
            next_question(session) do
       :answering_questions
     else
@@ -73,7 +73,7 @@ defmodule Gandalf.Session do
     end
   end
 
-  def submit_answer(session = %__MODULE__{answers: answers, config: config}, answer_index) do
+  def submit_answer(session = %__MODULE__{answers: answers}, answer_index) do
     if Enum.count(answers) < Enum.count(session.questions) do
       updated_session = %__MODULE__{session | answers: answers ++ [answer_index]}
 

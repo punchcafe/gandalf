@@ -35,7 +35,7 @@ defmodule Gandalf.Question.Repo do
     end)
   end
 
-  defp extract_questions(yaml_document = %{"topic" => topic, "questions" => questions}) do
+  defp extract_questions(%{"topic" => topic, "questions" => questions}) do
     Enum.map(questions, &yml_to_model(&1, topic))
   end
 

@@ -25,7 +25,7 @@ defmodule Gandalf.Session.Config do
   """
   @spec new(opts :: Keyword.t()) :: __MODULE__.t()
   def new(opts) when is_list(opts) do
-    if Enum.any?(opts, fn {key, v} -> key not in @enforce_keys end) do
+    if Enum.any?(opts, fn {key, _} -> key not in @enforce_keys end) do
       raise "Unknown opt provided. Valid opts are: #{Enum.join(@enforce_keys, ", ")}"
     end
 
