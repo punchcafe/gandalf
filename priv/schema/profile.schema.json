@@ -1,0 +1,21 @@
+{
+    "title": "Profile",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "name",
+      "included_topics"
+    ],
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "The name of this profile."
+      },
+      "included_topics": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  }
