@@ -31,7 +31,7 @@ defmodule Gandalf.Question.RepoTest do
         |> Enum.map(& &1.topic)
         |> Enum.uniq()
 
-      assert ["networks:tcp", "networks:http"] == question_topics
+      assert ["networks:http", "networks:tcp"] == Enum.sort(question_topics)
     end
 
     test ":include and :exclude parameters can be strings or lists of strings" do
@@ -48,7 +48,7 @@ defmodule Gandalf.Question.RepoTest do
         |> Enum.map(& &1.topic)
         |> Enum.uniq()
 
-      assert ["data_structures", "databases"] == question_topics
+      assert ["data_structures", "databases"] == Enum.sort(question_topics)
     end
 
     test "can filter :exclude by multiple topics" do
@@ -68,7 +68,7 @@ defmodule Gandalf.Question.RepoTest do
         |> Enum.map(& &1.topic)
         |> Enum.uniq()
 
-      assert ["networks:http"] == question_topics
+      assert ["networks:http"] == Enum.sort(question_topics)
     end
   end
 end

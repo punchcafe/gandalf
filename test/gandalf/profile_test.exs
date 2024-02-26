@@ -12,10 +12,10 @@ defmodule Gandalf.ProfileTest do
 
   describe "included_topics/1" do
     test "returns the included topics for a given profile" do
-      assert Profile.included_topics!(@test_profile) == [
+      assert Enum.sort(Profile.included_topics!(@test_profile)) == [
+        "data_structures",
                "databases",
-               "networks",
-               "data_structures"
+               "networks"
              ]
     end
 

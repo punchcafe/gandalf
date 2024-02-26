@@ -5,7 +5,7 @@ defmodule Gandalf.Resource.Repo do
 
   @spec topic_resources(topic :: [String.t()]) :: %{Topic.t() => Gandalf.Resource.t()}
   def topic_resources(topics) when is_list(topics) do
-    "./resources/resources/"
+    "./resources/"
     |> read_all()
     |> Enum.flat_map(& &1)
     |> Enum.filter(&(&1["topic"] in topics))

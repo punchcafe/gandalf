@@ -11,7 +11,7 @@ defmodule Gandalf.Topic.Repo do
   """
   @spec all_topics() :: [Topic.t()]
   def all_topics() do
-    "./resources/questions/"
+    "./questions/"
     |> read_all()
     |> Enum.map(fn %{"topic" => topic} -> topic end)
     |> Enum.uniq()

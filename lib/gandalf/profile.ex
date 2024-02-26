@@ -10,7 +10,7 @@ defmodule Gandalf.Profile do
   """
   @spec all_profiles() :: [String.t()]
   def all_profiles() do
-    "./resources/profiles/"
+    "./profiles/"
     |> read_all()
     |> Enum.map(fn %{"name" => name} -> name end)
     |> Enum.uniq()
@@ -21,7 +21,7 @@ defmodule Gandalf.Profile do
   """
   @spec included_topics!(String.t()) :: [String.t()]
   def included_topics!(profile) do
-    "./resources/profiles/"
+    "./profiles/"
     |> read_all()
     |> Enum.find(fn %{"name" => name} -> name == profile end)
     |> then(fn %{"included_topics" => topics} -> topics end)

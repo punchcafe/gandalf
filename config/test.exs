@@ -1,6 +1,6 @@
 import Config
 
-config :gandalf, Gandalf.Question.Repo, questions_dir: "./test/support/test_questions"
+config :gandalf, :resource_directory_fetcher, fn -> "./test/support/test_resources" end
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.

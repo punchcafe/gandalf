@@ -7,7 +7,8 @@
 # General application configuration
 import Config
 
-config :gandalf, Gandalf.Question.Repo, questions_dir: "./resources/questions/"
+#TODO: create an adapter + add tests
+config :gandalf, :resource_directory_fetcher, fn -> (:gandalf |> :code.priv_dir() |> to_string()) <> "/resources" end
 
 # Configures the endpoint
 config :gandalf, GandalfWeb.Endpoint,

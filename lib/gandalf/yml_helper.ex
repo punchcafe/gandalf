@@ -1,6 +1,7 @@
 defmodule Gandalf.YmlHelper do
+
   def read_all(file_or_directory) do
-    base_path = :gandalf |> :code.priv_dir() |> to_string()
+    base_path = Application.fetch_env!(:gandalf, :resource_directory_fetcher).()
     full_path = base_path <> "/" <> file_or_directory
     if File.dir?(full_path) do
       full_path
