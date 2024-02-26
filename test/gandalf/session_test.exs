@@ -51,11 +51,12 @@ defmodule Gandalf.SessionTest do
     test "sets the included topics", %{session: session} do
       session = Session.load_profile(session, "developer_user")
 
-      assert Enum.sort(Session.Config.included_topics(session.config)) == Enum.sort([
-               "databases",
-               "networks",
-               "data_structures"
-             ])
+      assert Enum.sort(Session.Config.included_topics(session.config)) ==
+               Enum.sort([
+                 "databases",
+                 "networks",
+                 "data_structures"
+               ])
     end
 
     test "loads the first set of questions", %{session: session} do

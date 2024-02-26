@@ -17,9 +17,9 @@ defmodule GandalfWeb.QuestionsLive do
         failed_topics = Session.Insight.failed_topics(session)
         resources = Repo.topic_resources(failed_topics)
 
-        socket 
-        |> assign(:topics, failed_topics) 
-        |> assign(:resources, resources) 
+        socket
+        |> assign(:topics, failed_topics)
+        |> assign(:resources, resources)
         |> render_result()
     end
   end

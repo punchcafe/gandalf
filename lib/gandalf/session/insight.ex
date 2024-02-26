@@ -45,9 +45,7 @@ defmodule Gandalf.Session.Insight do
     |> Enum.map(&extract_topic/1)
   end
 
-  defp topic_success_ratios(
-        %Session{questions: questions, answers: answers, config: config}
-       ) do
+  defp topic_success_ratios(%Session{questions: questions, answers: answers, config: config}) do
     questions
     |> Stream.zip(answers)
     |> Stream.map(fn {%{topic: topic, correct_answer_index: correct_answer}, user_answer} ->
