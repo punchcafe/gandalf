@@ -1,4 +1,5 @@
 # Gandalf
+[![Tests](https://github.com/punchcafe/gandalf/actions/workflows/tests.yml/badge.svg)](https://github.com/punchcafe/gandalf/actions/workflows/tests.yml)
 
 To start your Phoenix server:
 
