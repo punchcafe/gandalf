@@ -47,6 +47,10 @@ defmodule GandalfWeb.QuestionsLive do
   defp render_profile_selection(assigns) do
     ~H"""
     <div class="question place-items-center w-full">
+      <p class="question-text mb-10 px-20">
+        Please choose the category which best describes your current role:
+      </p>
+      <br>
       <%= for profile <- Gandalf.Profile.all_profiles() do %>
         <.button
           phx-click="profile-selection"
@@ -63,7 +67,11 @@ defmodule GandalfWeb.QuestionsLive do
   defp render_result(assigns) do
     ~H"""
     <div class="question">
-      It looks like you could do with a bit of practice in the following topics: <%= @topics %>
+      It looks like you could do with a bit of practice in the following topics: 
+      <br/>
+      <%= for topic <- @topics do%>
+      <ul> <%= topic %> </ul>
+      <% end %>
       <div class="resources">
         <%= for {topic, resources} <- @resources do %>
           <div class="topic_resources">

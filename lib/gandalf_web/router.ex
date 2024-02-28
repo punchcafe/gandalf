@@ -17,9 +17,7 @@ defmodule GandalfWeb.Router do
   scope "/", GandalfWeb do
     pipe_through(:browser)
 
-    get("/", PageController, :home)
-
-    live("/quiz", QuestionsLive)
+    live("/", QuestionsLive)
   end
 
   # Other scopes may use custom stacks.
